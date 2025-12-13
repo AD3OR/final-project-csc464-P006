@@ -21,6 +21,7 @@ dependencies:
   # adding firebase and firestore
   firebase_core: 
   cloud_firestore:
+  firebase_auth:
 
 
 dev_dependencies:
