@@ -6,9 +6,9 @@ class StudentProvider with ChangeNotifier {
 
   List<Map<String, dynamic>> students = [];
 
-  final bool _isLoading = false; 
+  final bool _isLoading = false;
 
-  bool get isLoading => _isLoading; 
+  bool get isLoading => _isLoading;
 
   // Fetch students of a course
   Future<void> fetchStudents(String courseId) async {
@@ -23,16 +23,17 @@ class StudentProvider with ChangeNotifier {
   }
 
   // Add student
-  Future<void> addStudent(String courseId, String name, String studentId) async {
+  Future<void> addStudent(
+    String courseId,
+    String name,
+    String studentId,
+  ) async {
     await _db
         .collection('students')
         .doc(courseId)
         .collection('students')
         .doc(studentId)
-        .set({
-      'studentName': name,
-      'studentId': studentId,
-    });
+        .set({'studentName': name, 'studentId': studentId});
 
     students.add({'studentName': name, 'studentId': studentId});
     notifyListeners();
@@ -40,7 +41,10 @@ class StudentProvider with ChangeNotifier {
 
   // Edit student
   Future<void> editStudent(
-      String courseId, String studentId, String newName) async {
+    String courseId,
+    String studentId,
+    String newName,
+  ) async {
     await _db
         .collection('students')
         .doc(courseId)
