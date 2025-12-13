@@ -1,7 +1,11 @@
+<<<<<<< Updated upstream
+=======
+import 'package:app/providers/routine_provider.dart';
+>>>>>>> Stashed changes
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-import 'package:app/Azwad/login.dart';
+import 'Azwad/login.dart';
 
 import 'firebase_options.dart';
 
