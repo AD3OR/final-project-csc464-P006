@@ -2,7 +2,7 @@ import 'package:app/providers/routine_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-import 'login.dart';
+import 'screens/login.dart';
 
 import 'firebase_options.dart';
 
@@ -14,7 +14,7 @@ import 'providers/course_provider.dart';
 
 
 // Screens
-import 'home.dart';
+import 'screens/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

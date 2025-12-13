@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // Providers
-import 'providers/student_provider.dart';
-import 'providers/attendance_provider.dart';
-import 'providers/course_provider.dart';
-import 'providers/routine_provider.dart';
+import '../providers/student_provider.dart';
+import '../providers/attendance_provider.dart';
+import '../providers/course_provider.dart';
+import '../providers/routine_provider.dart';
 
 // Existing screens
-import 'models/students.dart';
-import 'models/att.dart';
+import '../models/students.dart';
+import '../models/att.dart';
 
 // Course & routine screens
-import 'screens/course_list_screen.dart';
-import 'screens/course_select_routine_screen.dart';
-import 'screens/timetable_screen.dart';
+import 'course_list_screen.dart';
+import 'course_select_routine_screen.dart';
+import 'timetable_screen.dart';
 
 // Custom Color Palette
 const Color c1 = Color(0xFF696D7D);
