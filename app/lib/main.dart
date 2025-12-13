@@ -1,17 +1,16 @@
-<<<<<<< Updated upstream
-=======
-import 'package:app/providers/routine_provider.dart';
->>>>>>> Stashed changes
+import 'package:final_project_csc464_p006/providers/routine_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-import 'Azwad/login.dart';
 
 import 'firebase_options.dart';
 
 // Providers
 import 'providers/student_provider.dart';
 import 'providers/attendance_provider.dart';
+import 'providers/course_provider.dart';
+
+
 
 // Screens
 import 'home.dart';
@@ -35,11 +34,13 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => StudentProvider()),
         ChangeNotifierProvider(create: (_) => AttendanceProvider()),
+        ChangeNotifierProvider(create: (_) => CourseProvider()),
+        ChangeNotifierProvider(create: (_) => RoutineProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Attendance App',
-        home: const FacultyLoginPage(),
+        home: const HomePage(),
       ),
     );
   }
