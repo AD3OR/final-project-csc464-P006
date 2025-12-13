@@ -1,18 +1,16 @@
-// flutter_login_page.dart
-// Login page for Attendance app (Faculty)
-// - Uses Firebase Authentication (email/password)
-// - On success, navigates to Home() from home.dart
-
+import 'package:app/home.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-// Import your existing home screen (you uploaded home.dart). Make sure
-// the Home widget is exported from that file as `Home`.
-import "package:app/home.dart";
+// Color Palette
+const Color c1 = Color(0xFF696D7D);
+const Color c2 = Color(0xFF6F9283);
+const Color c3 = Color(0xFF8D9F87);
+const Color c4 = Color(0xFFCDC6A5);
+const Color c5 = Color(0xFFF0DCCA);
 
 class FacultyLoginPage extends StatefulWidget {
-  const FacultyLoginPage({Key? key}) : super(key: key);
+  const FacultyLoginPage({super.key});
 
   @override
   State<FacultyLoginPage> createState() => _FacultyLoginPageState();
@@ -20,208 +18,144 @@ class FacultyLoginPage extends StatefulWidget {
 
 class _FacultyLoginPageState extends State<FacultyLoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final _email = TextEditingController();
+  final _password = TextEditingController();
   bool _loading = false;
 
-  // Initialize Firebase if not already initialized.
-  // In your main.dart you should call `WidgetsFlutterBinding.ensureInitialized();`
-  // and `await Firebase.initializeApp();` before running the app. This check here
-  // protects against double initialization if you use this page in isolation.
-  Future<void> _ensureFirebaseInitialized() async {
-    try {
-      if (Firebase.apps.isEmpty) {
-        await Firebase.initializeApp();
-      }
-    } catch (e) {
-      // ignore errors here; main should handle initialization.
-    }
-  }
-
-  Future<void> _signIn() async {
+  Future<void> _login() async {
     if (!_formKey.currentState!.validate()) return;
+
     setState(() => _loading = true);
-
     try {
-      print('[LOGIN] Starting sign-in process');
-      await _ensureFirebaseInitialized();
-      print('[LOGIN] Firebase initialized successfully');
-
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text,
+      print('[LOGIN] Attempting login');
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _email.text.trim(),
+        password: _password.text,
       );
 
-      print(
-        '[LOGIN] FirebaseAuth signIn successful for: \${_emailController.text.trim()}',
+      print('[LOGIN] Success');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const HomePage()),
       );
-
-      if (credential.user != null) {
-        print('[LOGIN] Navigating to Home()');
-        Navigator.of(
-          context,
-        ).pushReplacement(MaterialPageRoute(builder: (_) => const HomePage()));
-      }
     } on FirebaseAuthException catch (e) {
-      print('[ERROR] FirebaseAuthException: \${e.code} - \${e.message}');
-      String message = 'Authentication failed';
-
-      if (e.code == 'user-not-found') {
-        message = 'No user found for that email.';
-      } else if (e.code == 'wrong-password') {
-        message = 'Wrong password provided for that user.';
-      } else if (e.code == 'invalid-email') {
-        message = 'Email address is not valid.';
-      } else {
-        message = 'Firebase auth error: \${e.message}';
-      }
-
+      print('[ERROR] ${e.code}');
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(message)));
+      ).showSnackBar(SnackBar(content: Text(e.message ?? 'Login failed')));
     } catch (e) {
-      print('[ERROR] Unexpected login error: \$e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Unexpected error occurred. Check console logs.'),
-        ),
-      );
+      print('[ERROR] Unexpected: $e');
     } finally {
-      print('[LOGIN] Sign-in process finished');
-      if (mounted) setState(() => _loading = false);
+      setState(() => _loading = false);
     }
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Faculty Login')),
+      backgroundColor: c4,
+      appBar: AppBar(
+        backgroundColor: c1,
+        title: const Text('Faculty Login'),
+        centerTitle: true,
+      ),
       body: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Logo / Title
-                const SizedBox(height: 12),
-                const FlutterLogo(size: 72),
-                const SizedBox(height: 16),
-                const Text(
-                  'Attendance — Faculty Login',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 24),
-
-                // Email
-                TextFormField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (v) {
-                    if (v == null || v.trim().isEmpty)
-                      return 'Please enter email';
-                    if (!RegExp(r"^[^@\s]+@[^@\s]+\.[^@\s]+$").hasMatch(v))
-                      return 'Enter valid email';
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 12),
-
-                // Password
-                TextFormField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (v) {
-                    if (v == null || v.isEmpty) return 'Please enter password';
-                    if (v.length < 6)
-                      return 'Password must be at least 6 characters';
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-
-                // Login button or loading indicator
-                SizedBox(
-                  width: double.infinity,
-                  child: _loading
-                      ? const Center(child: CircularProgressIndicator())
-                      : ElevatedButton(
-                          onPressed: _signIn,
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 14.0),
-                            child: Text(
-                              'Log in',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
-                        ),
-                ),
-
-                const SizedBox(height: 12),
-
-                // Optional: Forgot password / Register links
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        // TODO: implement password reset flow
-                      },
-                      child: const Text('Forgot password?'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        // Optional: open registration screen (if you support creating faculty accounts)
-                      },
-                      child: const Text('Register'),
-                    ),
-                  ],
+          padding: const EdgeInsets.all(24),
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: c5,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.15),
+                  blurRadius: 10,
+                  offset: const Offset(0, 6),
                 ),
               ],
+            ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.school, size: 64, color: c1),
+                  const SizedBox(height: 12),
+                  const Text(
+                    'Attendance System',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: c1,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Email
+                  TextFormField(
+                    controller: _email,
+                    decoration: _inputDecoration('Faculty Email'),
+                    validator: (v) => v!.isEmpty ? 'Enter email' : null,
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Password
+                  TextFormField(
+                    controller: _password,
+                    obscureText: true,
+                    decoration: _inputDecoration('Password'),
+                    validator: (v) =>
+                        v!.length < 6 ? 'Minimum 6 characters' : null,
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Login Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _loading ? null : _login,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: c2,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: _loading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Text(
+                              'LOGIN',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
   }
+
+  InputDecoration _inputDecoration(String label) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: const TextStyle(color: c1),
+      filled: true,
+      fillColor: Colors.white,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide.none,
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: c3, width: 2),
+      ),
+    );
+  }
 }
-
-/*
-  How to use:
-  1) Add firebase_core and firebase_auth to your pubspec.yaml:
-     firebase_core: ^2.10.0
-     firebase_auth: ^4.6.0
-     (Check pub.dev for latest versions)
-
-  2) Configure Firebase project (Android: google-services.json, iOS: GoogleService-Info.plist)
-     Follow Firebase docs to register your app and download the config files.
-
-  3) In your main.dart (before runApp) initialize Firebase:
-     void main() async {
-       WidgetsFlutterBinding.ensureInitialized();
-       await Firebase.initializeApp();
-       runApp(const MyApp());
-     }
-
-  4) Replace your login route to push to FacultyLoginPage, and ensure Home() exists in home.dart.
-
-  5) If you don't want to use Firebase, you can implement a REST/JWT backend instead and authenticate
-     by calling your API (then securely store the JWT using secure_storage). For production-ready apps
-     Firebase is often the fastest, secure choice for MVPs and many teams.
-*/
