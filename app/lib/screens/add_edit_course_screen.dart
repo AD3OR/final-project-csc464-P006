@@ -99,7 +99,7 @@ class _AddEditCourseScreenState extends State<AddEditCourseScreen> {
               ),
               const SizedBox(height: 24),
               _saving
-                  ? CircularProgressIndicator(color: c2)
+                  ? const CircularProgressIndicator(color: c2)
                   : SizedBox(
                       height: 48,
                       width: double.infinity,

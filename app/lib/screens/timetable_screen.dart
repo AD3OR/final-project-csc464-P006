@@ -68,7 +68,7 @@ class TimetableScreen extends StatelessWidget {
                     children: [
                       Text(
                         day,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
                           color: c1,

@@ -113,7 +113,7 @@ class _AddEditRoutineScreenState extends State<AddEditRoutineScreen> {
           child: Column(
             children: [
               DropdownButtonFormField(
-                value: _day,
+                initialValue: _day,
                 decoration: field("Day"),
                 items: _days
                     .map((d) => DropdownMenuItem(value: d, child: Text(d)))
@@ -134,7 +134,7 @@ class _AddEditRoutineScreenState extends State<AddEditRoutineScreen> {
               ),
               const SizedBox(height: 24),
               _saving
-                  ? CircularProgressIndicator(color: c2)
+                  ? const CircularProgressIndicator(color: c2)
                   : SizedBox(
                       width: double.infinity,
                       height: 48,

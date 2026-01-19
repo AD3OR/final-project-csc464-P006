@@ -33,16 +33,16 @@ class CourseListScreen extends StatelessWidget {
           }
           final courses = snapshot.data ?? [];
           if (courses.isEmpty) {
-            return Center(
+            return const Center(
               child: Padding(
-                padding: const EdgeInsets.all(24.0),
+                padding: EdgeInsets.all(24.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.book, size: 64, color: c1),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
                     Text('No courses yet', style: TextStyle(fontSize: 18, color: c1)),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
                     Text('Tap the + button to add your first course', textAlign: TextAlign.center, style: TextStyle(color: c1)),
                   ],
                 ),

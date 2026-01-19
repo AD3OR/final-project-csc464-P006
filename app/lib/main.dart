@@ -39,10 +39,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CourseProvider()),
         ChangeNotifierProvider(create: (_) => RoutineProvider()),
       ],
-      child: MaterialApp(
+      child: const MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Attendance App',
-        home: const FacultyLoginPage(),
+        home: FacultyLoginPage(),
       ),
     );
   }

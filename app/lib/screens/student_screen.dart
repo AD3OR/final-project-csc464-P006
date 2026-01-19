@@ -41,8 +41,8 @@ class _StudentScreenState extends State<StudentScreen> {
 
       floatingActionButton: FloatingActionButton(
         backgroundColor: c2,
-        child: const Icon(Icons.add, color: c5),
         onPressed: _showAddStudentDialog,
+        child: const Icon(Icons.add, color: c5),
       ),
 
       body: Consumer<StudentProvider>(

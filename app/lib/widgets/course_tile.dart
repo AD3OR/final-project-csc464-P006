@@ -28,7 +28,7 @@ class CourseTile extends StatelessWidget {
             MaterialPageRoute(builder: (_) => CourseDetailScreen(course: course)),
           );
         },
-        title: Text(course.name, style: TextStyle(fontWeight: FontWeight.bold, color: c1)),
+        title: Text(course.name, style: const TextStyle(fontWeight: FontWeight.bold, color: c1)),
         subtitle: Text(course.code, style: TextStyle(color: c1.withOpacity(0.8))),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
